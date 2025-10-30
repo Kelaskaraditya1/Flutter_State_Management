@@ -31,7 +31,8 @@ class HomeScreen extends StatelessWidget {
           }
           return SizedBox();
 
-        }),
+          }
+        ),
       ),
       bottomSheet: ElevatedButton(onPressed: (){
         // context.read<AuthBlock>().add(LoginEvent("kelaskaraditya1", "Aditya@1234"));

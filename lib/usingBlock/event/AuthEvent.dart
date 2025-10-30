@@ -1,4 +1,6 @@
-abstract class AuthEvent {}
+abstract class AuthEvent {
+
+}
 
 class LoginEvent extends AuthEvent{
 

@@ -82,8 +82,33 @@ void main(){
   }
 }
 *
+* for connecting Block with a particular screen we use BlockProvider.
+*
+* BlocProvider(create: (context) => AuthBlock(),
+        child: HomeScreen(),
+      )
+*
 * for using in UI: use BlocBuilder which accepts Block and State and gives a function with context and state.
 * than on the basis of state we can show the respective UI.
+*
+*  BlocBuilder<AuthBlock,AuthState>(builder: (context,state){
+          if(state is AuthLoadingState){
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }else if(state is AuthSuccessState){
+            return Center(
+              child: Text("Login Successfully"),
+            );
+          }else if(state is AuthFailureState){
+            return Center(
+              child: Text(state.errorMessage),
+            );
+          }
+          return SizedBox();
+
+          }
+        )
 *
 * and to trigger an event we can use context.read<Block>().add(Event()) or BlocProvider.of<Block>(context).add(Event())
 *
