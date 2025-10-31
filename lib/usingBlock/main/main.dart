@@ -110,6 +110,63 @@ void main(){
           }
         )
 *
+*
+* or we have to BlocConsumer which has both BlocBuilder and BlocListener.
+* BlockConsumer helps to listen to state and give toast etc and also render UI on the basis of state.
+*
+* it has 2 parts builder and listener.
+*
+* listner is used to listen to state changes and perform actions like showing a snackbar, toast, navigation etc.
+*
+* builder is used to build the UI based on the current state.
+*
+*                     BlocConsumer<AuthenticationBlock, AuthenticationState>(
+                          // --- LISTENER: Does actions (Nav, SnackBar) ---
+                          listener: (context, state) {
+                            if (state is AuthenticationSuccessState) {
+                              Navigator.pushReplacementNamed(
+                                  context, Keys.HOME_SCREEN_ROUTE);
+                            } else if (state is AuthenticationFailureState) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(state.errorMessage)),
+                              );
+                            }
+                          },
+                          // --- BUILDER: Returns a widget (UI) ---
+                          builder: (context, state) {
+                            // If loading, show spinner
+                            if (state is AuthenticationLoadingState) {
+                              return Center(child: CircularProgressIndicator());
+                            }
+
+                            // Otherwise, show the button
+                            return ElevatedButton(
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  // --- 4. FIXED: Dispatch the event to the BLoC ---
+                                  context.read<AuthenticationBlock>().add(
+                                    LoginEvent(
+                                      username: usernameController.text,
+                                      password: passwordController.text,
+                                    ),
+                                  );
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10))),
+                              child: Text(
+                                "Login",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20),
+                              ),
+                            );
+                          },
+                        )
+*
 * and to trigger an event we can use context.read<Block>().add(Event()) or BlocProvider.of<Block>(context).add(Event())
 *
 *
